@@ -2976,6 +2976,12 @@ public class JavaSEPort extends CodenameOneImplementation {
                 try {
                     // load Via URL loading
                     loadSkinFile(new URL(f).openStream(), frm);
+                } catch (MalformedURLException muex){
+                    // Issue# 2106: Handles the case of a URL with a bad protocol being passed in, including a fully qualified Windows path like C:\path\to\file.  
+                    //  Without this catch, the MalformedURLException would be caught as it's parent IOException and the simulator would start with no skin and hence no menus to select a skin.
+                    String d = System.getProperty("dskin");
+                    loadSkinFile(d, frm);
+                    return;
                 } catch (FileNotFoundException ex) {
                     String d = System.getProperty("dskin");
                     loadSkinFile(d, frm);
